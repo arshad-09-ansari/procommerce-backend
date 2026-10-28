@@ -3,7 +3,7 @@ services:
     build: .
     restart: unless-stopped
     ports:
-      - "5000:5000"
+      - "${API_HOST_PORT:-5000}:5000"
     env_file: .env
     depends_on:
       mongo:
@@ -22,6 +22,8 @@ services:
     build: .
     command: npm run worker
     restart: unless-stopped
+    healthcheck:
+      disable: true
     env_file: .env
     depends_on:
       mongo:
@@ -34,7 +36,7 @@ services:
     image: mongo:6
     restart: unless-stopped
     ports:
-      - "27017:27017"
+      - "${MONGO_HOST_PORT:-27017}:27017"
     volumes:
       - mongo_data:/data/db
     healthcheck:
@@ -46,7 +48,7 @@ services:
     image: redis:alpine
     restart: unless-stopped
     ports:
-      - "6379:6379"
+      - "${REDIS_HOST_PORT:-6379}:6379"
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
@@ -56,8 +58,8 @@ services:
     image: rabbitmq:3-management
     restart: unless-stopped
     ports:
-      - "5672:5672"
-      - "15672:15672"
+      - "${RABBITMQ_HOST_PORT:-5672}:5672"
+      - "${RABBITMQ_UI_HOST_PORT:-15672}:15672"
     healthcheck:
       test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
       interval: 10s

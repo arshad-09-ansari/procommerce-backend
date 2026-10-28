@@ -28,6 +28,7 @@
 4. Stop the services with `docker compose down` (add `-v` only if you also want to delete local MongoDB data).
 
 Compose waits for MongoDB, Redis, and RabbitMQ health checks before starting the API and worker. The API container runs as a non-root user and has a Docker health check.
+If a host port is already in use, set `API_HOST_PORT`, `MONGO_HOST_PORT`, `REDIS_HOST_PORT`, `RABBITMQ_HOST_PORT`, or `RABBITMQ_UI_HOST_PORT` in `.env` to an available port. These affect host access only; containers continue using their standard internal ports.
 
 ## Razorpay Test Flow
 POST /api/v1/payments/create-intent { amount: 500, orderId }
